@@ -1,27 +1,35 @@
 package subtask2
 
-import kotlin.math.sqrt
-
 class SquareDecomposer {
 
     // TODO: Complete the following function
     fun decomposeNumber(number: Int): Array<Int>? {
-        // 50 {1, 3, 5, 8, 49}
-        val squareArray: ArrayList<Int> = arrayListOf()
-        for (i in number*number-1 downTo 1 step 1){
-            if (isWhole(sqrt(i.toDouble()))){
-                squareArray.add(i)
+        val newNum = number.toLong()
+        val result = mutableListOf(newNum)
+
+        var ost = 0L
+
+        while (!result.isNullOrEmpty()) {
+            val temp = result.last()
+            result.indexOfLast {
+                result.remove(it)
+            }
+
+            ost += square(temp)
+            for (i in temp-1 downTo 0) {
+                if (ost - square(i) >= 0){
+                    ost -= square(i)
+                    result.add(i)
+
+                    if (ost == 0L){
+                        result.sort()
+                        return result.map{it.toInt()}.toTypedArray()
+                    }
+                }
             }
         }
-        squareArray.forEach { println(it) }
-
-
-
         return null
     }
-
-    private fun isWhole(d: Double): Boolean{
-        return d - d.toInt() == 0.0
-    }
+    private fun square(x: Long) = x * x
 
 }
